@@ -2,15 +2,17 @@
 #define MATRIX_H
 
 #include <cstddef>
-#include <unordered_map>
+#include <tuple>
+#include <map>
 
 namespace otus {
 
   template <typename T, T default_val>
-  class Vector {
+  class Matrix {
     class Pool {
     public:
-      void assign(size_t index, T value) {
+      using IndexType = std::tuple<std::size_t, std::size_t>;
+      void assign(IndexType index, T value) {
         if (value != default_val) {
           data[index] = value;
         } else {
@@ -18,28 +20,31 @@ namespace otus {
         }
       }
 
-      T get(size_t index) {
+      T get(IndexType index) {
         if (data.count(index)) return data[index];
         else return default_val;
       }
 
-      size_t size() { return data.size(); }
+      std::size_t size() { return data.size(); }
 
     private:
-      std::unordered_map<size_t, T> data { };
+      std::map<IndexType, T> data { };
     };
 
-    class Proxy {
+    // TODO Make indeces compile-time args.
+    class ProxyCol {
     public:
-      Proxy(size_t index, Pool &pool): index(index), pool(pool) { }
+      ProxyCol(std::size_t row, std::size_t col, Pool &pool):
+      index(std::make_tuple(row, col)),
+      pool(pool) { }
 
-      ~Proxy() = default;
-      Proxy(Proxy const &other) = delete;
-      Proxy* operator =(Proxy const &other) = delete;
-      Proxy(Proxy &&other) = delete;
-      Proxy* operator =(Proxy &&other) = delete;
+      ~ProxyCol() = default;
+      ProxyCol(ProxyCol const &other) = delete;
+      ProxyCol* operator =(ProxyCol const &other) = delete;
+      ProxyCol(ProxyCol &&other) = delete;
+      ProxyCol* operator =(ProxyCol &&other) = delete;
 
-      Proxy* operator =(T const &value) {
+      ProxyCol* operator =(T const &value) {
         pool.assign(index, value);
         return this;
       }
@@ -47,30 +52,36 @@ namespace otus {
       operator T() { return pool.get(index); }
 
     private:
-      size_t index;
+      std::tuple<std::size_t, std::size_t> index;
+      Pool &pool;
+    };
+
+    class ProxyRow {
+    public:
+      ProxyRow(std::size_t row, Pool &pool): row(row), pool(pool) { }
+
+      ~ProxyRow() = default;
+      ProxyRow(ProxyRow const &other) = delete;
+      ProxyRow* operator =(ProxyRow const &other) = delete;
+      ProxyRow(ProxyRow &&other) = delete;
+      ProxyRow* operator =(ProxyRow &&other) = delete;
+
+      ProxyCol operator [](std::size_t index) {
+        return ProxyCol(row, index, pool);
+      }
+
+    private:
+      std::size_t row;
       Pool &pool;
     };
 
   public:
-    Vector() { }
-    size_t size() { return pool.size(); }
-    Proxy operator [](size_t index) { return Proxy(index, pool); }
+    Matrix() { }
+    std::size_t size() { return pool.size(); }
+    ProxyRow operator [](std::size_t index) { return ProxyRow(index, pool); }
 
   private:
     Pool pool;
-  };
-
-  template <typename T, T default_val>
-  class Matrix {
-  public:
-    Matrix() {}
-
-    size_t size() { return vector.size(); }
-
-    Vector<T, default_val>& operator [](size_t index) { }
-
-  private:
-    Vector<T, default_val> vector;
   };
 }
 

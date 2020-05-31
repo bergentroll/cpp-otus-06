@@ -3,10 +3,10 @@
 #include "matrix.h"
 
 int main() {
-  otus::Vector<int, -1> v { };
-  std::cout << v.size() << std::endl;
-  v[100] = 108;
-  std::cout << v.size() << std::endl;
-  std::cout << v[0] << std::endl;
-  std::cout << v[100] << std::endl;
+  otus::Matrix<int, -1> m { };
+  std::cout << m.size() << std::endl;
+  m[100][100] = 108;
+  std::cout << m.size() << std::endl;
+  std::cout << m[0][0] << std::endl;
+  std::cout << m[100][100] << std::endl;
 }
