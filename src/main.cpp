@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 
 #include "matrix.h"
 
@@ -30,4 +31,7 @@ int main() {
   for(auto [row, col, val]: m) {
     std::cout << "m[" << row << ':' << col << "] = " << val << std::endl;
   }
+
+  ((m[100][100] = 314) = 0) = 217;
+  assert(m[100][100] == 217);
 }

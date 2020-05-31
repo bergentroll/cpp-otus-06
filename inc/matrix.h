@@ -51,9 +51,9 @@ namespace otus {
       ProxyCol(ProxyCol &&other) = delete;
       ProxyCol* operator =(ProxyCol &&other) = delete;
 
-      ProxyCol* operator =(T const &value) {
+      ProxyCol& operator =(T const &value) {
         pool.assign(index, value);
-        return this;
+        return *this;
       }
 
       operator T() { return pool.get(index); }
