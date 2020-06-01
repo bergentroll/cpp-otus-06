@@ -37,8 +37,6 @@ namespace otus {
       std::map<IndexType, T> data { };
     };
 
-    // TODO Make indeces compile-time args.
-    // TODO Const version.
     class ProxyCol {
     public:
       ProxyCol(std::size_t row, std::size_t col, Pool &pool):
