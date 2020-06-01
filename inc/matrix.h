@@ -58,6 +58,14 @@ namespace otus {
 
       operator T() { return pool.get(index); }
 
+      bool operator ==(T const &other) const {
+        return pool.get(index) == other;
+      }
+
+      bool operator !=(T const &other) const {
+        return !(*this == other);
+      }
+
     private:
       std::tuple<std::size_t, std::size_t> index;
       Pool &pool;

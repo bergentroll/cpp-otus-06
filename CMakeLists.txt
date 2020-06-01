@@ -23,37 +23,23 @@ add_executable(matrix ${SRC_PATH}/main.cpp)
 
 ### Tests #####################################################################
 
-#if(EXISTS "${GTEST_SRCDIR}/CMakeLists.txt")
-#  add_subdirectory(${GTEST_SRCDIR}/ ${CMAKE_BINARY_DIR}/gtest/ EXCLUDE_FROM_ALL)
-#
-#  add_executable(test_suite ${TEST_PATH}/test.cpp)
-#  target_link_libraries(
-#    test_suite
-#    PRIVATE
-#    gtest)
-#  add_test(test_suite test_suite)
-#else()
-#  message(
-#    WARNING
-#    "Test suite will not be launched because GTest sources is not found at "
-#    "${GTEST_SRCDIR}.")
-#endif()
+if(EXISTS "${GTEST_SRCDIR}/CMakeLists.txt")
+  add_subdirectory(${GTEST_SRCDIR}/ ${CMAKE_BINARY_DIR}/gtest/ EXCLUDE_FROM_ALL)
+
+  add_executable(test_suite ${TEST_PATH}/test.cpp)
+  target_link_libraries(
+    test_suite
+    PRIVATE
+    gtest)
+  add_test(test_suite test_suite)
+else()
+  message(
+    WARNING
+    "Test suite will not be launched because GTest sources is not found at "
+    "${GTEST_SRCDIR}.")
+endif()
 
 enable_testing()
-
-### Documentation #############################################################
-
-#if(DOXYGEN_FOUND)
-#  configure_file(
-#    ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
-#    ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-#    @ONLY)
-#  add_custom_target(
-#    html
-#    ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-#    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-#    COMMENT "Creating HTML documentation with Doxygen" VERBATIM)
-#endif()
 
 ### Packing ###################################################################
 
