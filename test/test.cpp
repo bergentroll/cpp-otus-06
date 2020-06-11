@@ -37,10 +37,7 @@ TEST(matri, values) {
   };
   for (auto i: m) {
     bool found { false };
-    std::for_each(
-      a.begin(),
-      a.end(),
-      [&i, &found](auto item) { if (i == item) found = true; });
+    std::find(a.begin(), a.end(), i);
     EXPECT_TRUE(found);
   }
 }

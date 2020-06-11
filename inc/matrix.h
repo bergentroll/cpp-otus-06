@@ -18,7 +18,7 @@ namespace otus {
         if (value != default_val) {
           data[index] = value;
         } else {
-          if (data.count(index)) data.erase(index);
+          data.erase(index);
         }
       }
 
@@ -27,7 +27,7 @@ namespace otus {
         else return default_val;
       }
 
-      std::size_t size() { return data.size(); }
+      std::size_t size() const { return data.size(); }
 
       IteratorType begin() { return data.begin(); }
 
@@ -100,8 +100,12 @@ namespace otus {
        return Iterator(++iterator);
      }
 
+     bool operator ==(Iterator const &other) {
+       return (iterator == other.iterator);
+     }
+
      bool operator !=(Iterator const &other) {
-       return (iterator != other.iterator);
+       return !(*this == other);
      }
 
       private:
@@ -111,7 +115,7 @@ namespace otus {
   public:
     Matrix() { }
 
-    std::size_t size() { return pool.size(); }
+    std::size_t size() const { return pool.size(); }
 
     ProxyRow operator [](std::size_t index) { return ProxyRow(index, pool); }
 
