@@ -90,19 +90,29 @@ namespace otus {
 
     class Iterator {
       public:
+      using value_type = std::tuple<std::size_t, std::size_t, T>;
+      using difference_type = size_t;
+      using reference = value_type&;
+      using pointer = value_type*;
+      using iterator_category = std::forward_iterator_tag;
+
       Iterator(typename Pool::IteratorType iterator): iterator(iterator) { }
 
-      std::tuple<std::size_t, std::size_t, T> operator *() {
+      value_type operator *() {
         return std::tuple_cat(iterator->first, std::make_tuple(iterator->second));
       }
 
-     Iterator operator ++() {
-       return Iterator(++iterator);
-     }
+      Iterator operator ++() {
+        return Iterator(++iterator);
+      }
 
-     bool operator !=(Iterator const &other) {
-       return (iterator != other.iterator);
-     }
+      bool operator ==(Iterator const &other) {
+        return (iterator == other.iterator);
+      }
+
+      bool operator !=(Iterator const &other) {
+        return !(*this == other);
+      }
 
       private:
         typename Pool::IteratorType iterator;

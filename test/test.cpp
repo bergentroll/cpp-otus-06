@@ -35,14 +35,15 @@ TEST(matri, values) {
     std::make_tuple(100, 101, 2),
     std::make_tuple(101, 100, 3)
   };
-  for (auto i: m) {
-    bool found { false };
-    std::for_each(
-      a.begin(),
-      a.end(),
-      [&i, &found](auto item) { if (i == item) found = true; });
-    EXPECT_TRUE(found);
+  for (auto i: a) {
+    auto it { std::find(m.begin(), m.end(), i) };
+    EXPECT_TRUE(it != m.end());
   }
+
+  m[100][100] = -1;
+  m[100][101] = -1;
+  m[101][100] = -1;
+  EXPECT_EQ(m.size(), 0);
 }
 
 int main(int argc, char** argv) {
