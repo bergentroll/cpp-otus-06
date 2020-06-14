@@ -12,6 +12,14 @@ set(CMAKE_CXX_STANDARD 17)
 ### Dependencies ##############################################################
 
 set(GTEST_SRCDIR "/usr/src/gtest/")
+set(GTEST_FOUND Yes)
+if(NOT EXISTS "${GTEST_SRCDIR}/CMakeLists.txt")
+  set(GTEST_SRCDIR "/usr/src/googletest/")
+endif()
+if(NOT EXISTS "${GTEST_SRCDIR}/CMakeLists.txt")
+  set(GTEST_FOUND No)
+endif()
+
 set(SRC_PATH "src/")
 set(TEST_PATH "test/")
 include_directories("inc/")
@@ -23,7 +31,7 @@ add_executable(matrix ${SRC_PATH}/main.cpp)
 
 ### Tests #####################################################################
 
-if(EXISTS "${GTEST_SRCDIR}/CMakeLists.txt")
+if(GTEST_FOUND)
   add_subdirectory(${GTEST_SRCDIR}/ ${CMAKE_BINARY_DIR}/gtest/ EXCLUDE_FROM_ALL)
 
   add_executable(test_suite ${TEST_PATH}/test.cpp)
